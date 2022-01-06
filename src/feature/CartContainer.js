@@ -3,10 +3,13 @@ import CartItem from "./CartItem";
 import {
   shoppingCartTotal,
   shoppingCartCart,
+  ClearShoppingCart,
+  CountAmountAndTotal,
 } from "../slice/shoppingCartSlice.js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const CartContainer = () => {
+  const dispatch = useDispatch();
   const total = useSelector(shoppingCartTotal);
   const cart = useSelector(shoppingCartCart);
   if (cart.length === 0) {
@@ -36,7 +39,15 @@ const CartContainer = () => {
             total <span>{total}$</span>
           </h4>
         </div>
-        <button className="btn clear-btn">clear cart</button>
+        <button
+          className="btn clear-btn"
+          onClick={() => {
+            dispatch(ClearShoppingCart());
+            dispatch(CountAmountAndTotal());
+          }}
+        >
+          clear cart
+        </button>
       </footer>
     </section>
   );

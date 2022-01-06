@@ -6,8 +6,8 @@ import {
   SetLoadingFalse,
   SetLoadingTrue,
   SetShoppingCart,
-  shoppingCartCart,
   shoppingCartLoading,
+  CountAmountAndTotal,
 } from "./slice/shoppingCartSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 const url = "https://course-api.com/react-useReducer-cart-project";
@@ -19,6 +19,7 @@ function App() {
     const respons = await fetch(url);
     const data = await respons.json();
     dispatch(SetShoppingCart(data));
+    dispatch(CountAmountAndTotal());
     dispatch(SetLoadingTrue());
   };
   useEffect(() => {

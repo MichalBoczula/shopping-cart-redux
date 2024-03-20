@@ -7,8 +7,9 @@ import {
 import { useDispatch } from "react-redux";
 const CartItem = ({ id, img, title, price, amount }) => {
   const dispatch = useDispatch();
+  console.log(id);
   return (
-    <article className="cart-item">
+    <article className="cart-item" data-testid={id}>
       <img src={img} alt={title} />
       <div>
         <h4>{title}</h4>
@@ -27,6 +28,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
       <div>
         {/* increase amount */}
         <button
+          id="increaseBtn"
           className="amount-btn"
           onClick={() => {
             dispatch(ToogleAmount({ id: id, action: 1 }));
@@ -41,6 +43,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
         <p className="amount">{amount}</p>
         {/* decrease amount */}
         <button
+          id="decreaseBtn"
           className="amount-btn"
           onClick={() => {
             dispatch(ToogleAmount({ id: id, action: -1 }));

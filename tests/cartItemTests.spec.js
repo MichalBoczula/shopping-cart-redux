@@ -183,3 +183,49 @@ test('Clicking the decrease button, should article disapper', async ({ page }) =
 
     await expect(dissapearedElement).not.toBeVisible();
 });
+
+
+test('Generate screens', async ({ page }) => {
+    const amountElement = page.locator('[data-testid="rec1JZlfCIBOPdcT2"] .amount');
+
+    ////wait for element
+    ////await amountElement.waitFor();
+
+    await amountElement.evaluate((element) => {
+        element.style.setProperty('background-color', 'orange', 'important');
+    });
+
+    await page.screenshot({
+        path: './tests/screens/Generate screens/1.png',
+        fullPage: true,
+        type: 'png'
+      });
+      
+    // await page.waitForTimeout(2000);
+
+    const initialAmountText = await amountElement.textContent();
+    const initialAmount = parseInt(initialAmountText, 10);
+
+    const increaseBtnElement = page.locator('[data-testid="rec1JZlfCIBOPdcT2"] #increaseBtn');
+
+    await increaseBtnElement.evaluate((element) => {
+        element.style.setProperty('background-color', 'orange', 'important');
+    });
+
+    // await page.waitForTimeout(2000);
+
+    await increaseBtnElement.click();
+
+    await page.screenshot({
+        path: './tests/screens/Generate screens/2.png',
+        fullPage: true,
+        type: 'png'
+      });
+      
+    // await page.waitForTimeout(2000);
+
+    const updatedAmountText = await amountElement.textContent();
+    const updatedAmount = parseInt(updatedAmountText, 10);
+
+    await expect(updatedAmount).toBe(initialAmount + 1);
+});

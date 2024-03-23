@@ -52,13 +52,8 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Prepare documentation branch
-        run: |
-          git checkout --orphan temporary_branch
-          git reset --hard
-          git commit --allow-empty -m "Initializing temporary branch"
-          git checkout -b documentation
-          git push -f origin documentation
+      - name: Reset the documentation branch
+        run: git reset --hard
 
       - name: Copy index.html to the root
         run: cp playwright-report/index.html ./index.html
@@ -68,5 +63,3 @@ jobs:
           git add index.html
           git commit -m "Update documentation"
           git push -f origin documentation
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

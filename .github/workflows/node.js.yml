@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: documentation
-          token: ${{ secrets.REACT_DOCUMENTATION }}
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
 
       - name: Configure Git
         run: |
@@ -55,9 +55,8 @@ jobs:
       - name: Prepare documentation branch
         run: |
           git checkout --orphan temporary_branch
-          git add -A
-          git commit -m "Initialize temporary branch"
-          git branch -D documentation
+          git reset --hard
+          git commit --allow-empty -m "Initializing temporary branch"
           git checkout -b documentation
           git push -f origin documentation
 
@@ -70,4 +69,4 @@ jobs:
           git commit -m "Update documentation"
           git push -f origin documentation
         env:
-          GITHUB_TOKEN: ${{ secrets.REACT_DOCUMENTATION }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

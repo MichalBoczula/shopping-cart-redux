@@ -47,15 +47,27 @@ jobs:
           ref: documentation
           token: ${{ secrets.MY_GITHUB_TOKEN }}
 
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Prepare documentation branch
+        run: |
+          git checkout --orphan temporary_branch
+          git add -A
+          git commit -m "Initialize temporary branch"
+          git branch -D documentation
+          git checkout -b documentation
+          git push -f origin documentation
+
       - name: Copy index.html to the root
         run: cp playwright-report/index.html ./index.html
 
       - name: Commit and push changes
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
           git add index.html
           git commit -m "Update documentation"
-          git push origin documentation
+          git push -f origin documentation
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

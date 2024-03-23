@@ -4,10 +4,10 @@ module.exports = {
             name: 'Chromium',
             use: { browserName: 'chromium' },
         },
-        {
-            name: 'Edge',
-            use: { browserName: 'chromium', channel: 'msedge' },
-        },
+        // {
+        //     name: 'Edge',
+        //     use: { browserName: 'chromium', channel: 'msedge' },
+        // },
     ],
     reporter: 'html',
 };

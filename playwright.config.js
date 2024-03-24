@@ -8,4 +8,5 @@ module.exports = {
         },
     ],
     reporter: 'html'
+    //reporter: ['html', 'allure-playwright']
 };

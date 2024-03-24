@@ -17,7 +17,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean-allure-results": "rmdir /s /q allure-results && mkdir allure-results",
+    "test:playwright": "npm run clean-allure-results && npx playwright test",
+    "clean-attachments": "rd /s /q allure-report\\data\\attachments"
   },
   "eslintConfig": {
     "extends": [
@@ -38,6 +41,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.42.1"
+    "@playwright/test": "^1.42.1",
+    "allure-playwright": "^2.15.0"
   }
 }

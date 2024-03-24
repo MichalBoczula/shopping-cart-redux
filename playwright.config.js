@@ -7,5 +7,5 @@ module.exports = {
             use: { browserName: 'chromium' },
         },
     ],
-    reporter: ['html', 'allure-playwright']
+    reporter: 'html'
 };

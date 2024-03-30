@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean-allure-results": "rmdir /s /q allure-results && mkdir allure-results",
-    "test:playwright": "npm run clean-allure-results && npx playwright test",
+    "test:playwright": "npm run clean-allure-results && npx playwright test --",
     "clean-attachments": "rd /s /q allure-report\\data\\attachments"
   },
   "eslintConfig": {

@@ -1,5 +1,7 @@
-const { test, expect } = require('@playwright/test');
-import { allure } from "allure-playwright";
+import { test, expect } from '@playwright/test';
+import { allure } from 'allure-playwright';
+import fs from 'fs';
+import path from 'path';
 
 test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3000');
@@ -7,16 +9,30 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Generate first doc test', async ({ page }, testInfo) => {
-    const amountElement = page.locator('[data-testid="rec1JZlfCIBOPdcT2"] .amount');
+    const screenshotDir = path.join(__dirname, './screens/Documentation/FirstTest');
+    const screenshotFile = 'InitialState.png';
+    const screenshotFile2 = 'ClickIncreaseButton.png';
+    const screenshotFile3 = 'FinalState.png';
+    const screenshotPath = path.join(screenshotDir, screenshotFile);
+    const screenshotPath2 = path.join(screenshotDir, screenshotFile2);
+    const screenshotPath3 = path.join(screenshotDir, screenshotFile3);
     let initialAmount;
+
+    if (!fs.existsSync(screenshotDir)) {
+        fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+
+    const amountElement = page.locator('[data-testid="rec1JZlfCIBOPdcT2"] .amount');
 
     await allure.step("Initial state", async () => {
         await amountElement.evaluate((element) => {
             element.style.setProperty('background-color', 'orange', 'important');
         });
 
+        await page.screenshot({ path: screenshotPath });
+
         await testInfo.attach('Initial state', {
-            body: await page.screenshot(),
+            body: fs.readFileSync(screenshotPath),
             contentType: 'image/png',
         });
 
@@ -35,8 +51,10 @@ test('Generate first doc test', async ({ page }, testInfo) => {
             element.style.setProperty('background-color', 'orange', 'important');
         });
 
+        await page.screenshot({ path: screenshotPath2 });
+
         await testInfo.attach('Click increase button', {
-            body: await page.screenshot(),
+            body: fs.readFileSync(screenshotPath2),
             contentType: 'image/png',
         });
 
@@ -60,8 +78,10 @@ test('Generate first doc test', async ({ page }, testInfo) => {
             element.style.setProperty('background-color', 'orange', 'important');
         });
 
+        await page.screenshot({ path: screenshotPath3 });
+
         await testInfo.attach('Final state', {
-            body: await page.screenshot(),
+            body: fs.readFileSync(screenshotPath3),
             contentType: 'image/png',
         });
 

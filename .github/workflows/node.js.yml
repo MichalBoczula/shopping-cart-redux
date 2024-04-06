@@ -10,38 +10,38 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.43.0-jammy 
+      image: mcr.microsoft.com/playwright:v1.42.1-jammy
 
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v3
+      - name: Check out the repo
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build React App
-      run: CI=false npm run build
+      - name: Build React App
+        run: CI=false npm run build
 
-    - name: Start React App
-      run: npm start &
-      env:
-        CI: true
+      - name: Start React App
+        run: npm start &
+        env:
+          CI: true
 
-    - name: Run Playwright tests
-      run: npx playwright test
-      env:
-        HOME: /root
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          HOME: /root
 
-    - name: Archive Playwright report
-      uses: actions/upload-artifact@v2
-      with:
-        name: playwright-report
-        path: playwright-report
+      - name: Archive Playwright report
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-report
+          path: playwright-report
 
   update-documentation:
     runs-on: ubuntu-latest
@@ -52,30 +52,22 @@ jobs:
         with:
           ref: documentation
           token: ${{ secrets.MY_GITHUB_TOKEN }}
-          fetch-depth: 0  # Fetch all history for all branches and tags
-  
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-  
+          fetch-depth: 0  # Fetch all history
+
       - name: Reset the documentation branch
         run: git reset --hard origin/documentation
-  
+
       - name: Download Playwright report
         uses: actions/download-artifact@v2
         with:
           name: playwright-report
           path: playwright-report
-  
+
       - name: Copy report files to the root
         run: |
-          rm -rf *  # Remove all files in the current directory
-          cp -r playwright-report/* ./  # Copy new report files
-  
+          cp -r playwright-report/* ./
+
       - name: Commit and push changes
         run: |
           git add .
-          git commit -m "Update documentation" || echo "No changes to commit"
-          git push -f origin documentation
-  
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update documentation" && git push -f origin documentation)

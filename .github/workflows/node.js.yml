@@ -67,12 +67,15 @@ jobs:
       - name: Reset the documentation branch
         run: git reset --hard origin/documentation
   
-      - name: Copy report files to the root
-        run: cp -r playwright-report/. ./
-  
+      - name: Copy index.html to the root
+        run: cp playwright-report/index.html ./index.html
+
+      - name: Copy data folder to the root
+        run: cp -r playwright-report/data/ ./data/
+
       - name: Commit and push changes
         run: |
-             git add index.html
-             git add data/
-             git commit -m "Update documentation"
-             git push -f origin documentation
+          git add index.html
+          git add data/
+          git commit -m "Update documentation"
+          git push -f origin documentation

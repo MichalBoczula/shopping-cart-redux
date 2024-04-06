@@ -50,8 +50,8 @@ jobs:
       - name: Check out the allure-report repo
         uses: actions/checkout@v3
         with:
-          repository: 'MichalBoczula/allure-report' 
-          token: ${{ secrets.MY_GITHUB_TOKEN }} 
+          repository: 'MichalBoczula/allure-report'
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
   
       - name: Download Playwright report
         uses: actions/download-artifact@v2
@@ -64,14 +64,15 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
   
-      - name: Replace old report with new
+      - name: Copy new report files
         run: |
-          rm -rf *  # Caution: This deletes all files in the allure-report repo's root
-          cp -r temp-report/* .
-          rm -rf temp-report
+          if [ -d "temp-report" ]; then
+            cp -r temp-report/* .
+          else
+            echo "No new report files to update."
+          fi
   
       - name: Commit and push changes
         run: |
           git add .
-          git commit -m "Update Allure report"
-          git push -f origin main  # Adjust if you're using a different branch in the allure-report repository
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Allure report" && git push -f origin main)

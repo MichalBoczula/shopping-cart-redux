@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.42.0-jammy
+      image: mcr.microsoft.com/playwright:v1.43.0-jammy 
 
     steps:
     - name: Check out the repo

@@ -37,42 +37,41 @@ jobs:
       env:
         HOME: /root
 
-    # Persisting the playwright-report directory for the next job
     - name: Archive Playwright report
       uses: actions/upload-artifact@v2
       with:
         name: playwright-report
-        path: playwright-report
+        path: allure-report  # Update this path to where your Allure reports are generated
 
   update-documentation:
     runs-on: ubuntu-latest
     needs: build-and-test
     steps:
-      - name: Check out the repo (documentation branch)
+      - name: Check out the allure-report repo
         uses: actions/checkout@v3
         with:
-          ref: documentation
+          repository: 'your-username/allure-report'  # Replace with your actual repository
           token: ${{ secrets.MY_GITHUB_TOKEN }}
 
       - name: Download Playwright report
         uses: actions/download-artifact@v2
         with:
           name: playwright-report
-          path: playwright-report
+          path: temp-report
 
       - name: Configure Git
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Reset the documentation branch
-        run: git reset --hard
-
-      - name: Copy index.html to the root
-        run: cp playwright-report/index.html ./index.html
+      - name: Replace old report with new
+        run: |
+          rm -rf *  # Caution: This deletes all files in the allure-report repo's root
+          cp -r temp-report/* .
+          rm -rf temp-report
 
       - name: Commit and push changes
         run: |
-          git add index.html
-          git commit -m "Update documentation"
-          git push -f origin documentation
+          git add .
+          git commit -m "Update Allure report"
+          git push -f origin main  # Ensure this is the correct branch in your allure-report repository

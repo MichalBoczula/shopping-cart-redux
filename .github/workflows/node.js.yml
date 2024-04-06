@@ -68,7 +68,7 @@ jobs:
         run: git reset --hard origin/documentation
   
       - name: Copy report files to the root
-        run: cp -r playwright-report/* ./
+        run: cp -r playwright-report/. ./
   
       - name: Commit and push changes
         run: |

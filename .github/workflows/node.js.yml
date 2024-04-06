@@ -37,7 +37,6 @@ jobs:
       env:
         HOME: /root
 
-    # Persisting the playwright-report directory for the next job
     - name: Archive Playwright report
       uses: actions/upload-artifact@v2
       with:
@@ -45,36 +44,35 @@ jobs:
         path: playwright-report
 
   update-documentation:
-  runs-on: ubuntu-latest
-  needs: build-and-test
-  steps:
-    - name: Check out the repo (documentation branch)
-      uses: actions/checkout@v3
-      with:
-        ref: documentation
-        token: ${{ secrets.MY_GITHUB_TOKEN }}
-
-    - name: Download Playwright report
-      uses: actions/download-artifact@v2
-      with:
-        name: playwright-report
-        path: playwright-report
-
-    - name: Configure Git
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-
-    - name: Reset the documentation branch
-      run: git reset --hard
-
-    # This step ensures both index.html and the data folder are copied
-    - name: Copy report files to the root
-      run: |
-        cp -r playwright-report/* ./
-    
-    - name: Commit and push changes
-      run: |
-        git add .
-        git commit -m "Update documentation"
-        git push -f origin documentation
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Check out the repo (documentation branch)
+        uses: actions/checkout@v3
+        with:
+          ref: documentation
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+  
+      - name: Download Playwright report
+        uses: actions/download-artifact@v2
+        with:
+          name: playwright-report
+          path: playwright-report
+  
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+  
+      - name: Reset the documentation branch
+        run: git reset --hard
+  
+      - name: Copy report files to the root
+        run: |
+          cp -r playwright-report/* ./
+      
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Update documentation"
+          git push -f origin documentation
